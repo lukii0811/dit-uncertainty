@@ -15,6 +15,7 @@ def edm_sampler(
 ):
     # Adjust noise levels based on what's supported by the network.
     sigma_min = max(sigma_min, net.sigma_min)
+    #test comment
     sigma_max = min(sigma_max, net.sigma_max)
 
     # Time step discretization.
