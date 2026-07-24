@@ -119,6 +119,22 @@ Setup 3 (`--experiment fixed-mask` / suite `fixed-mask`) applies TREAD on every
 solver step like Setup 1, but samples the routing mask once and reuses it
 (`mask_schedule=fixed`). Setup 1 keeps resampling (`mask_schedule=per_step`).
 
+Patch-level epistemic/aleatoric maps from a Setup 3 paired run:
+
+```bash
+python visualize_mask_uncertainty.py \
+  --run-dir ../runs/suite_run/setup3_fixed_mask/keep_0p5/<sampling_tag> \
+  --checkpoint ../parameters/0400000.pt \
+  --output-dir ../runs/uncertainty_viz \
+  --steps 0,25,49 \
+  --num-routes 16 --num-seeds 4 \
+  --allow-unsafe-checkpoint-load
+```
+
+Uses \(\hat{x}_0=x_t-tv\), TREAD patchify, then
+\(U_{epi}=\mathrm{Var}_r[\mathbb{E}_z]\), \(U_{ale}=\mathbb{E}_r[\mathrm{Var}_z]\)
+(component-wise over patch features, then mean). Writes heatmaps and `profiles.csv`.
+
 Solver, step count, CFG, branch-routing mode, guidance interval, and mask seed
 are appended below these familiar directories only when needed to distinguish
 list combinations. Every run still contains:
