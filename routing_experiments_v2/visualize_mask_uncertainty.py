@@ -160,8 +160,11 @@ def run_class_step(
         "step_idx": step_idx,
         "time": t,
         "uepi_mean": float(u_epi.mean()),
+        "uepi_std": float(u_epi.std(unbiased=False)),
         "uale_mean": float(u_ale.mean()),
+        "uale_std": float(u_ale.std(unbiased=False)),
         "utot_mean": float(u_tot.mean()),
+        "utot_std": float(u_tot.std(unbiased=False)),
     }
 
 
