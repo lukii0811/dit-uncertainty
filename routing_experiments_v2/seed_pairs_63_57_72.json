@@ -1,0 +1,121 @@
+{
+  "format": "tread-class-balanced-seed-pairs-v3",
+  "dataset_num_classes": 1000,
+  "num_selected_classes": 3,
+  "selected_classes": [
+    57,
+    63,
+    72
+  ],
+  "class_selection": "explicit",
+  "class_selection_seed": null,
+  "samples_per_class": 4,
+  "count": 12,
+  "noise_master_seed": 20260718,
+  "noise_seed_range": [
+    0,
+    2147483647
+  ],
+  "noise_seed_mode": "independent-per-class",
+  "num_unique_noise_seeds": 12,
+  "generated_noise_seeds": [
+    1409234739,
+    264712783,
+    1626857644,
+    1094801211,
+    1562168113,
+    278914652,
+    1494323942,
+    214812011,
+    730912874,
+    1978932844,
+    557270904,
+    163634818
+  ],
+  "pairs": [
+    {
+      "sample_id": 0,
+      "seed": 1409234739,
+      "class_idx": 57,
+      "class_position": 0,
+      "noise_index_within_class": 0
+    },
+    {
+      "sample_id": 1,
+      "seed": 264712783,
+      "class_idx": 57,
+      "class_position": 0,
+      "noise_index_within_class": 1
+    },
+    {
+      "sample_id": 2,
+      "seed": 1626857644,
+      "class_idx": 57,
+      "class_position": 0,
+      "noise_index_within_class": 2
+    },
+    {
+      "sample_id": 3,
+      "seed": 1094801211,
+      "class_idx": 57,
+      "class_position": 0,
+      "noise_index_within_class": 3
+    },
+    {
+      "sample_id": 4,
+      "seed": 1562168113,
+      "class_idx": 63,
+      "class_position": 1,
+      "noise_index_within_class": 0
+    },
+    {
+      "sample_id": 5,
+      "seed": 278914652,
+      "class_idx": 63,
+      "class_position": 1,
+      "noise_index_within_class": 1
+    },
+    {
+      "sample_id": 6,
+      "seed": 1494323942,
+      "class_idx": 63,
+      "class_position": 1,
+      "noise_index_within_class": 2
+    },
+    {
+      "sample_id": 7,
+      "seed": 214812011,
+      "class_idx": 63,
+      "class_position": 1,
+      "noise_index_within_class": 3
+    },
+    {
+      "sample_id": 8,
+      "seed": 730912874,
+      "class_idx": 72,
+      "class_position": 2,
+      "noise_index_within_class": 0
+    },
+    {
+      "sample_id": 9,
+      "seed": 1978932844,
+      "class_idx": 72,
+      "class_position": 2,
+      "noise_index_within_class": 1
+    },
+    {
+      "sample_id": 10,
+      "seed": 557270904,
+      "class_idx": 72,
+      "class_position": 2,
+      "noise_index_within_class": 2
+    },
+    {
+      "sample_id": 11,
+      "seed": 163634818,
+      "class_idx": 72,
+      "class_position": 2,
+      "noise_index_within_class": 3
+    }
+  ]
+}
