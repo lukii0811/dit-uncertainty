@@ -125,6 +125,15 @@ def decode_class_reference_image(base_module, vae, class_records, vae_dtype, lat
     return decoded[0].permute(1, 2, 0).numpy()
 
 
+def save_reference_image(image_hwc, path):
+    """Save HxWx3 uint8 image as PNG."""
+    from PIL import Image
+
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    Image.fromarray(image_hwc).save(path)
+
+
 def run_class_step(
     model, class_records, step_idx, out_dir, mask_ratio, num_routes, mask_seed,
     base_image=None, **cfg,
@@ -217,6 +226,7 @@ def main():
         base_image = None
         if args.overlay:
             base_image = decode_class_reference_image(base, vae, recs, vae_dtype, latent_scale, latent_bias)
+            save_reference_image(base_image, out / f"class_{class_idx:04d}_ref.png")
         for step in steps:
             rows.append(
                 run_class_step(
