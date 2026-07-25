@@ -1,14 +1,13 @@
-"""Epistemic / aleatoric maps via law of total variance over routes and seeds."""
+"""Epistemic / aleatoric maps via law of total variance over routes and seeds.
+
+Uncertainty is computed directly on the predicted velocity v(x_t, t) (no
+one-step x0 extrapolation), so it reflects the model's instantaneous output
+at the given noisy latent rather than a denoising preview.
+"""
 
 import torch
 
 from sampling.sit_routing_sampler import predict_guided_velocity, sample_ids_keep
-
-
-def velocity_to_x0(latents, velocity, time_value):
-    """Linear flow matching: x0 = x_t - t * v. latents/velocity broadcastable."""
-    t = float(time_value)
-    return latents.float() - t * velocity.float()
 
 
 def patchify(latents, patch_size):
@@ -26,7 +25,7 @@ def patchify(latents, patch_size):
 def decompose_route_seed_variance(patches_mk):
     """Law of total variance over routes r and seeds z.
 
-    patches_mk: (M, K, N, D) patchified x0_hat.
+    patches_mk: (M, K, N, D) patchified velocity.
     Returns U_epi, U_ale, U_tot each (N,):
       U_ale = mean_D E_r[Var_z], U_epi = mean_D Var_r[E_z].
     """
@@ -40,11 +39,11 @@ def decompose_route_seed_variance(patches_mk):
 
 
 @torch.no_grad()
-def collect_x0_mk(
+def collect_velocity_mk(
     model, latents_k, labels_k, time_value, mask_ratio, num_routes, mask_seed,
     cfg_scale=1.5, guidance_low=0.0, guidance_high=1.0, cfg_routing_mode="both",
 ):
-    """Evaluate M routes × K seeds at one t; return x0_hat (M, K, C, H, W)."""
+    """Evaluate M routes × K seeds at one t; return predicted velocity (M, K, C, H, W)."""
     model_dtype = next(model.parameters()).dtype
     rows = []
     for route_idx in range(num_routes):
@@ -59,7 +58,7 @@ def collect_x0_mk(
                 cfg_scale, guidance_low, guidance_high, model_dtype,
                 route_this_step=True, ids_keep=ids, cfg_routing_mode=cfg_routing_mode,
             )
-            cols.append(velocity_to_x0(x, v, time_value)[0])
+            cols.append(v.float()[0])
         rows.append(torch.stack(cols, dim=0))
     return torch.stack(rows, dim=0)
 
@@ -69,11 +68,11 @@ def estimate_uncertainty_maps(
     model, latents_k, labels_k, time_value, mask_ratio, num_routes, mask_seed,
     cfg_scale=1.5, guidance_low=0.0, guidance_high=1.0, cfg_routing_mode="both",
 ):
-    """M×K x0 at one t → patchify → (U_epi, U_ale, U_tot) each (N,)."""
-    x0_mk = collect_x0_mk(
+    """M×K velocity predictions at one t → patchify → (U_epi, U_ale, U_tot) each (N,)."""
+    v_mk = collect_velocity_mk(
         model, latents_k, labels_k, time_value, mask_ratio, num_routes, mask_seed,
         cfg_scale, guidance_low, guidance_high, cfg_routing_mode,
     )
     patch_size = int(model.x_embedder.patch_size[0])
-    patches = patchify(x0_mk, patch_size)
+    patches = patchify(v_mk, patch_size)
     return decompose_route_seed_variance(patches)

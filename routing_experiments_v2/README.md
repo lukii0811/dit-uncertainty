@@ -131,7 +131,8 @@ python visualize_mask_uncertainty.py \
   --allow-unsafe-checkpoint-load
 ```
 
-Uses \(\hat{x}_0=x_t-tv\), TREAD patchify, then
+Uses the predicted velocity \(v(x_t,t)\) directly (no one-step \(x_0\)
+extrapolation), TREAD patchify, then
 \(U_{epi}=\mathrm{Var}_r[\mathbb{E}_z]\), \(U_{ale}=\mathbb{E}_r[\mathrm{Var}_z]\)
 (component-wise over patch features, then mean). Writes heatmaps and `profiles.csv`.
 
